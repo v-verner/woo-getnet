@@ -7,7 +7,7 @@ class WC_Getnet_Api
     public function __construct($gateway = null)
     {
         $this->gateway = $gateway;
-        $this->getnet_url = $this->gateway->IsSandbox() ? 'https://api-sandbox.getnet.com.br/' : 'https://api-homologacao.getnet.com.br/';
+        $this->getnet_url = $this->gateway->IsSandbox() ? 'https://api-sandbox.getnet.com.br/' : 'https://api.getnet.com.br/';
     }
 
     public function FetchGetnetData(string $endpoint, $data)

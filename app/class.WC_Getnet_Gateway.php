@@ -148,8 +148,10 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 				'order_id' => (string) $order_id
 			],
 			'customer' => [
-				'customer_id' => (string) $order->get_customer_id(),
-				'billing_address' => (object) []
+				'customer_id' 		=> (string) $order->get_customer_id(),
+				'first_name'		=> $order->get_billing_first_name(),
+				'last_name'			=> $order->get_billing_last_name(),
+				'billing_address' 	=> (object) []
 			],
 			'device' => (object) [],
 			'shippings' => [
