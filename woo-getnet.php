@@ -29,7 +29,7 @@
  */
 
 // Plugin constants.
-define( 'WC_GETNET_VERSION', '1.1.0' );
+define( 'WC_GETNET_VERSION', '1.0.0' );
 define( 'WC_GETNET_PLUGIN_FILE', __FILE__ );
 
 if ( ! class_exists( 'WC_Getnet' ) ) {

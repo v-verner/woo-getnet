@@ -23,9 +23,9 @@ class WC_Getnet
         }
     }
 
-    public static function OnlyDigits($string)
+    public static function OnlyDigits(string $str)
 	{
-		return preg_replace('/\D/', '', $string);
+		return preg_replace('/\D/', '', $str);
 	}
 
 	public static function FormatNumber($number)

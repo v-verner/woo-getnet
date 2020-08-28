@@ -135,11 +135,12 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 		$order = wc_get_order($order_id);
 		if(!isset($_POST['getnet_ccToken']) || empty($_POST['getnet_ccToken'])) return;
 
-		$token = $_POST['getnet_ccToken'];
+		$token = sanitize_text_field($_POST['getnet_ccToken']);
 
 		$status = ['result'   => 'fail','redirect' => ''];
 		$card = $this->GetCardData($token);
-		$transaction_type = ((int) $_POST['getnet_installments'] !== 1) ? 'INSTALL_NO_INTEREST' : 'FULL';
+		$installments = (int) sanitize_text_field($_POST['getnet_installments']);
+		$transaction_type = ($installments !== 1) ? 'INSTALL_NO_INTEREST' : 'FULL';
 
 		$data = [
 			'seller_id' => $this->seller_id,
@@ -163,7 +164,7 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 				'delayed' => false,
 				'save_card_data' => false,
 				'transaction_type' => $transaction_type,
-				'number_installments' => (int) $_POST['getnet_installments'],
+				'number_installments' => $installments,
 				'card' => (object) $card
 			]
 		];

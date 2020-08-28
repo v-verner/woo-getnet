@@ -30,7 +30,7 @@ class WC_Getnet_Api
         return $res;
     }
 
-    public function GetCardToken($cardNumber)
+    public function GetCardToken(string $cardNumber)
     {
         $data = (object) [
             'card_number' => WC_Getnet::OnlyDigits($cardNumber)
