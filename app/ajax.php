@@ -6,7 +6,7 @@ function getnet_processCreditCard()
 {
 	$res 	= [
 		'status'  => 'error',
-		'message' => 'Houve um problema ao processar seu cartão. Verifique os dados informados e tente novamente'
+		'message' => __('Houve um problema ao processar seu cartão. Verifique os dados informados e tente novamente', 'vverner-getnet')
 	];
 
 	$card 	 = sanitize_text_field($_POST['card']);

@@ -10,6 +10,8 @@
  * WC tested up to:      4.4
  * Requires at least:    5.4
  * Requires PHP:         7.1
+ * Domain Path: 		 /languages
+ * Text Domain: 		 vverner-getnet
  *
  * VVerner - Getnet Gateway is free software: you can
  * redistribute it and/or modify it under the terms of the

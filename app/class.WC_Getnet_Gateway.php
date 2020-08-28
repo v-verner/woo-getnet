@@ -5,8 +5,8 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 	{
 		$this->id = 'getnet';
 		$this->has_fields = true;
-		$this->method_title = 'Getnet';
-		$this->method_description = 'Integra o método de pagamento iFrame no checkout do Woocommerce';
+		$this->method_title = __('Getnet', 'vverner-getnet');
+		$this->method_description = __('Integra o método de pagamento da Getnet no checkout do Woocommerce', 'vverner-getnet');
 		$this->supports = ['products'];
 
 		$this->init_form_fields();
@@ -31,70 +31,70 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 	{
 		$this->form_fields = array(
 			'enabled' => array(
-				'title'       => 'Habilitar',
-				'label'       => 'Habilitar checkout iFrame da Getnet no checkout',
+				'title'       => __('Habilitar', 'vverner-getnet'),
+				'label'       => __('Habilitar checkout iFrame da Getnet no checkout', 'vverner-getnet'),
 				'type'        => 'checkbox',
 				'description' => '',
 				'default'     => 'no'
 			),
 			'title' => array(
-				'title'       => 'Nome no checkout',
+				'title'       => __('Nome no checkout', 'vverner-getnet'),
 				'type'        => 'text',
-				'description' => 'Como será exibida a opção de pagamento durante o checkout',
-				'default'     => 'Pague via cartão de crédito',
+				'description' => __('Como será exibida a opção de pagamento durante o checkout', 'vverner-getnet'),
+				'default'     => __('Pague via cartão de crédito', 'vverner-getnet'),
 				'desc_tip'    => true,
 			),
 			'description' => array(
-				'title'       => 'Descrição',
+				'title'       => __('Descrição', 'vverner-getnet'),
 				'type'        => 'textarea',
-				'description' => 'Informações extras disponíveis durante o checkout',
-				'default'     => 'Transação segura via Getnet',
+				'description' => __('Informações extras disponíveis durante o checkout', 'vverner-getnet'),
+				'default'     => __('Transação segura via Getnet', 'vverner-getnet'),
 			),
 			'min_installment' => [
-				'title'	=> 'Valor mínimo da parcela',
-				'type'	=> 'number',
-				'default' => 10,
+				'title'			=> __('Valor mínimo da parcela', 'vverner-getnet'),
+				'type'			=> 'number',
+				'default' 		=> 10,
 			],
 			'installments' => [
-				'title' => 'Máximo de Parcelas',
+				'title' => __('Máximo de Parcelas', 'vverner-getnet'),
 				'type'  => 'select',
 				'default' => 12,
 				'options' => [1,2,3,4,5,6,7,8,9,10,11,12]
 			],
 			'sandbox' => array(
-				'title'       => 'Sandbox',
-				'label'       => 'Marque para utilizar a versão de testes da integração',
+				'title'       => __('Sandbox', 'vverner-getnet'),
+				'label'       => __('Marque para utilizar a versão de testes da integração', 'vverner-getnet'),
 				'type'        => 'checkbox',
 				'default'     => 'no',
 				'desc_tip'    => true,
 			),
 			'sandbox_client_id' => array(
-				'title'       => 'SANDBOX: Client ID',
+				'title'       => __('SANDBOX: Client ID', 'vverner-getnet'),
 				'type'        => 'text',
 				'class'	      => 'sandbox'
 			),
 			'sandbox_client_secret' => array(
-				'title'       => 'SANDBOX: Client Secret',
+				'title'       => __('SANDBOX: Client Secret', 'vverner-getnet'),
 				'type'        => 'text',
 				'class'	      => 'sandbox'
 			),
 			'sandbox_seller_id' => array(
-				'title'       => 'SANDBOX: Seller ID',
+				'title'       => __('SANDBOX: Seller ID', 'vverner-getnet'),
 				'type'        => 'text',
 				'class'	      => 'sandbox'
 			),
 			'client_id' => array(
-				'title'       => 'Client ID',
+				'title'       => __('Client ID', 'vverner-getnet'),
 				'type'        => 'text',
 				'class'	      => 'production'		
 			),
 			'client_secret' => array(
-				'title'       => 'Client Secret',
+				'title'       => __('Client Secret', 'vverner-getnet'),
 				'type'        => 'text',
 				'class'	      => 'production'		
 			),
 			'seller_id' => array(
-				'title'       => 'Seller ID',
+				'title'       => __('Seller ID', 'vverner-getnet'),
 				'type'        => 'text',
 				'class'	      => 'production'		
 			)
@@ -104,10 +104,10 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 	public function payment_fields()
 	{
 		if(!empty($this->description)) {
-			echo  wpautop(wp_kses_post(trim($this->description)));
+			echo wpautop(trim(sanitize_text_field($this->description)));
 		}
 		if ($this->sandbox){ 
-			echo wpautop(wp_kses_post('Versão de testes, utilize os cartões de créditos disponibilizados <a href="https://developers.getnet.com.br/checkout#section/Cartoes-para-Teste" target="_blank" rel="noopener noreferrer">neste link</a>'));
+			echo wpautop(__('Versão de testes, utilize os cartões de créditos disponibilizados <a href="https://developers.getnet.com.br/checkout#section/Cartoes-para-Teste" target="_blank" rel="noopener noreferrer">neste link</a>', 'vverner-getnet'));
 		}
 
 		wc_get_template(
@@ -123,7 +123,9 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 		if (empty($this->seller_id) || empty($this->client_id) || empty($this->client_secret)) return;
 		if (!is_cart() && !is_checkout() && !isset($_GET['pay_for_order'])) return;
 
-		wp_enqueue_script('gn-main', plugins_url('assets/main.js', __FILE__), ['jquery', 'jquery-mask'], null, true);
+		$min = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
+
+		wp_enqueue_script('gn-main', plugins_url('assets/main'. $min .'.js', __FILE__), ['jquery', 'jquery-mask'], WC_GETNET_VERSION, true);
 		wp_localize_script('gn-main', 'getnetParams', [
 			'url' 	=> admin_url('admin-ajax.php'),
 		]);
@@ -174,14 +176,14 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 		if (isset($res['status_code'])) {
 			error_log('GETNET: não foi possível realizar o pagamento devido a ' . $res['message']);
 			error_log(print_r($res, true));
-			wc_add_notice( 'GETNET: ' . $res['message'], 'error' );
+			wc_add_notice(__('GETNET: ', 'vverner-getnet') . $res['message'], 'error' );
 			return $status;
 		}
 
 		if($res['status'] === 'APPROVED') {
 			$order->payment_complete();
 			wc_reduce_stock_levels($order);
-			$order->add_order_note( 'Pagamento recebido', false );
+			$order->add_order_note(__('Pagamento recebido', 'vverner-getnet'), false );
 			$woocommerce->cart->empty_cart();
 
 			$this->RemoveCardData($token);

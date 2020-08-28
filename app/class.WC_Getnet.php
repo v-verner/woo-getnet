@@ -28,19 +28,18 @@ class WC_Getnet
 		return preg_replace('/\D/', '', $str);
 	}
 
-	public static function FormatNumber($number)
+	public static function FormatNumber($number): string
 	{
 		return number_format($number, 2, ',', '.');
 	}
 
     public static function admin_scripts()
 	{
-		$page = (isset($_GET['page'])) ? $_GET['page'] === 'wc-settings' : false;
-		$section = (isset($_GET['section'])) ? $_GET['section'] === 'getnet' : false;
+        $screen = get_current_screen();
+        if($screen->base !== 'woocommerce_page_wc-settings') return;
+		$min = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
 
-		if(!$page || !$section) return;
-
-		wp_enqueue_script('getnet-admin', plugins_url('app/assets/admin.js', WC_GETNET_PLUGIN_FILE));
+		wp_enqueue_script('getnet-admin', plugins_url('app/assets/admin'. $min .'.js', WC_GETNET_PLUGIN_FILE), ['jquery'], WC_GETNET_VERSION, true);
 	}
 
     public static function get_templates_path()
@@ -51,7 +50,7 @@ class WC_Getnet
     public static function plugin_action_links($links)
     {
         $plugin_links   = array();
-        $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=getnet')) . '">Configurações</a>';
+        $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=getnet')) . '">'. __('Configurações', 'vverner-getnet') .'</a>';
 
         return array_merge($plugin_links, $links);
     }

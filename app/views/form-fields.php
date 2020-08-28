@@ -3,23 +3,33 @@
     <?php do_action('woocommerce_credit_card_form_start', 'getnet'); ?>
     <div class="form-row form-row-wide">
         <input type="hidden" id="getnet_ccToken" name="getnet_ccToken">
-        <label>Nome impresso no cartão <span class="required">*</span></label>
+        <label>
+            <?= __('Nome impresso no cartão *', 'vverner-getnet')?>
+        </label>
         <input id="getnet_ccName" type="text" autocomplete="off">
     </div>
     <div class="form-row form-row-wide">
-        <label for="getnet_ccNo">Número do Cartão <span class="required">*</span></label>
+        <label for="getnet_ccNo">
+            <?= __('Número do Cartão *', 'vverner-getnet')?>
+        </label>
         <input id="getnet_ccNo" type="text" autocomplete="off" inputmode="numeric">
     </div>
     <div class="form-row form-row-first">
-        <label for="getnet_expdate">Data de Validade <span class="required">*</span></label>
+        <label for="getnet_expdate">
+            <?= __('Data de Validade *', 'vverner-getnet')?>
+        </label>
         <input id="getnet_expdate" type="text" autocomplete="off" placeholder="MM/AA" inputmode="numeric">
     </div>
     <div class="form-row form-row-last">
-        <label for="getnet_cvv">Código de Segurança (CVC) <span class="required">*</span></label>
+        <label for="getnet_cvv">
+            <?= __('Código de Segurança (CVC) *', 'vverner-getnet')?>
+        </label>
         <input id="getnet_cvv" type="password" autocomplete="off" placeholder="CVC" inputmode="numeric" maxlength="3">
     </div>
     <div class="form-row-wide">
-        <label for="getnet_installments">Parcelamento</label>
+        <label for="getnet_installments">
+            <?= __('Parcelamento *', 'vverner-getnet')?>
+        </label>
         <select name="getnet_installments" id="getnet_installments">
             <?php foreach($installments as $i) : ?>
                 <option value="<?= $i['qty'] ?>">

@@ -1,5 +1,8 @@
 jQuery(function($){
     const $toggleSandbox = $('#woocommerce_getnet_sandbox');
+
+    if(!$toggleSandbox.length) return;
+
     $toggleSandbox.change(updateNeededKeys);
     updateNeededKeys();
 
