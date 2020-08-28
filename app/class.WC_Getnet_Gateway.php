@@ -65,7 +65,7 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 				'title'       => 'Sandbox',
 				'label'       => 'Marque para utilizar a versão de testes da integração',
 				'type'        => 'checkbox',
-				'default'     => 'yes',
+				'default'     => 'no',
 				'desc_tip'    => true,
 			),
 			'sandbox_client_id' => array(
@@ -197,8 +197,8 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 	{
 		global $woocommerce;
 		$orderAmount = $woocommerce->cart->total;
-		$res = [];
-		for($i = 1; $i <= $this->installments; $i++) : 
+		$res = [['qty' => 1, 'price' => $orderAmount]];
+		for($i = 2; $i <= $this->installments; $i++) : 
 			$iAmount = $orderAmount / $i;
 			if($iAmount < $this->min_installment) break;
 		

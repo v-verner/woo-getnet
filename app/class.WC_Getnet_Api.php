@@ -10,23 +10,21 @@ class WC_Getnet_Api
         $this->getnet_url = $this->gateway->IsSandbox() ? 'https://api-sandbox.getnet.com.br/' : 'https://api.getnet.com.br/';
     }
 
-    public function FetchGetnetData(string $endpoint, $data)
+    public function FetchGetnetData(string $endpoint, $data): array
     {
         $url = $this->getnet_url . $endpoint;
 
-        $req = curl_init($url);
-        curl_setopt($req, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json; charset=utf-8',
-            'Authorization: ' . $this->GetAuthToken(),
-            'seller_id: ' . $this->gateway->seller_id
+        $req = wp_remote_post($url,[
+            'body'    => wp_json_encode($data),
+            'headers' => array(
+                'Content-Type'  => 'application/json; charset=utf-8',
+                'Authorization' => $this->GetAuthToken(),
+                'seller_id'     => $this->gateway->seller_id,
+            ),
         ]);
-        curl_setopt($req, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($req, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($req, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($req, CURLOPT_ENCODING, "gzip");
-        $res = json_decode(curl_exec($req), true);
-        curl_close($req);
 
+        $rawRes = wp_remote_retrieve_body($req);
+        $res = json_decode($rawRes, true);
         return $res;
     }
 
@@ -48,7 +46,7 @@ class WC_Getnet_Api
         return $res['number_token'];
     }
 
-    public function ValidateCard($token, $month, $year, $cvv, $name)
+    public function ValidateCard($token, $month, $year, $cvv, $name): bool
     {
         $data = (object) [
             'number_token'         => $token,
@@ -73,27 +71,31 @@ class WC_Getnet_Api
         return true;
     }
 
-    private function SetAuthToken($tokenData)
+    private function SetAuthToken(array $tokenData): string
     {
         $token = $tokenData['token_type'] . ' ' . $tokenData['access_token'];
         set_transient('getnet-auth-token', $token, $tokenData['expires_in']);
         return $token;
     }
 
-    private function GetAuthToken()
+    private function GetAuthToken(): string
     {
         $cache = get_transient('getnet-auth-token');
         if ($cache) return $cache;
 
         $url = $this->getnet_url . 'auth/oauth/v2/token';
-        $req = curl_init($url);
-        curl_setopt($req, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
-        curl_setopt($req, CURLOPT_USERPWD, $this->gateway->client_id . ':' . $this->gateway->client_secret);
-        curl_setopt($req, CURLOPT_POSTFIELDS, 'scope=oob&grant_type=client_credentials');
-        curl_setopt($req, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($req, CURLOPT_RETURNTRANSFER, true);
-        $res = json_decode(curl_exec($req), true);
-        curl_close($req);
+        
+        $req = wp_remote_post($url,[
+            'body'    => 'scope=oob&grant_type=client_credentials',
+            'headers' => array(
+                'Content-Type'  => 'application/x-www-form-urlencoded',
+                'Authorization' => 'Basic ' . base64_encode($this->gateway->client_id . ':' . $this->gateway->client_secret),
+                'seller_id'     => $this->gateway->seller_id,
+            ),
+        ]);
+
+        $rawRes = wp_remote_retrieve_body($req);
+        $res = json_decode($rawRes, true);
 
         if (isset($res['error'])) {
             error_log('GETNET: não foi possível gerar o token de autorização devido a ' . $res['error_description']);
