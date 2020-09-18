@@ -37,8 +37,8 @@ class WC_Getnet_Api
         $res = $this->FetchGetnetData('v1/tokens/card', $data);
 
         if (isset($res['status_code'])) {
-            error_log('GETNET: não foi possível gerar o token do cartão devido a ' . $res['message']);
-            error_log(print_r($res, true));
+            WC_Getnet::Log('GETNET: não foi possível gerar o token do cartão devido a ' . $res['message']);
+            WC_Getnet::Log(print_r($res, true));
             wc_add_notice('GETNET: Número do cartão inválido', 'error');
             return false;
         }
@@ -58,8 +58,9 @@ class WC_Getnet_Api
         $res = $this->FetchGetnetData('v1/cards/verification', $data);
 
         if (isset($res['status_code'])) {
-            error_log('GETNET: não foi possível validar o cartão devido a ' . $res['message']);
-            error_log(print_r($res, true));
+            WC_Getnet::Log('GETNET: não foi possível validar o cartão devido a ' . $res['message']);
+            WC_Getnet::Log(print_r($res, true));
+
             wc_add_notice('GETNET: Cartão inválido', 'error');
             return false;
         }
@@ -98,8 +99,8 @@ class WC_Getnet_Api
         $res = json_decode($rawRes, true);
 
         if (isset($res['error'])) {
-            error_log('GETNET: não foi possível gerar o token de autorização devido a ' . $res['error_description']);
-            error_log(print_r($res));
+            WC_Getnet::Log('GETNET: não foi possível gerar o token de autorização devido a ' . $res['error_description']);
+            WC_Getnet::Log(print_r($res, true));
             wc_add_notice('GETNET: Erro interno na requisição.', 'error');
             return '';
         }

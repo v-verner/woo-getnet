@@ -84,6 +84,11 @@ Por enquanto não, estamos trabalhando nesta funcionalidade
 
 == Changelog ==
 
-= 1.0.0 - 28/08/2020
+= 1.0.1 - 18/08/2020 =
+
+* Inseridos textos em inglês para futura tradução
+* Ativada integração com log nativo do WooCommerce
+
+= 1.0.0 - 28/08/2020 =
 
 * Lançamento do Plugin

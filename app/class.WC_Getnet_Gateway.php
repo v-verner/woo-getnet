@@ -6,7 +6,7 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 		$this->id = 'getnet';
 		$this->has_fields = true;
 		$this->method_title = __('Getnet', 'vverner-getnet');
-		$this->method_description = __('Integra o método de pagamento da Getnet no checkout do Woocommerce', 'vverner-getnet');
+		$this->method_description = __('Integrates Getnet payment method into Woocommerce checkout', 'vverner-getnet');
 		$this->supports = ['products'];
 
 		$this->init_form_fields();
@@ -31,39 +31,39 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 	{
 		$this->form_fields = array(
 			'enabled' => array(
-				'title'       => __('Habilitar', 'vverner-getnet'),
-				'label'       => __('Habilitar checkout iFrame da Getnet no checkout', 'vverner-getnet'),
+				'title'       => __('Enable', 'vverner-getnet'),
+				'label'       => __('Enable Getnet\'s transparent checkout on WooCommerce', 'vverner-getnet'),
 				'type'        => 'checkbox',
 				'description' => '',
 				'default'     => 'no'
 			),
 			'title' => array(
-				'title'       => __('Nome no checkout', 'vverner-getnet'),
+				'title'       => __('Payment method name', 'vverner-getnet'),
 				'type'        => 'text',
-				'description' => __('Como será exibida a opção de pagamento durante o checkout', 'vverner-getnet'),
-				'default'     => __('Pague via cartão de crédito', 'vverner-getnet'),
+				'description' => __('How the payment option will be displayed during checkout', 'vverner-getnet'),
+				'default'     => __('Pay via credit card', 'vverner-getnet'),
 				'desc_tip'    => true,
 			),
 			'description' => array(
-				'title'       => __('Descrição', 'vverner-getnet'),
+				'title'       => __('Description', 'vverner-getnet'),
 				'type'        => 'textarea',
-				'description' => __('Informações extras disponíveis durante o checkout', 'vverner-getnet'),
-				'default'     => __('Transação segura via Getnet', 'vverner-getnet'),
+				'description' => __('Extra information available during checkout', 'vverner-getnet'),
+				'default'     => __('Secure transaction via Getnet', 'vverner-getnet'),
 			),
 			'min_installment' => [
-				'title'			=> __('Valor mínimo da parcela', 'vverner-getnet'),
+				'title'			=> __('Minimum installment value', 'vverner-getnet'),
 				'type'			=> 'number',
 				'default' 		=> 10,
 			],
 			'installments' => [
-				'title' => __('Máximo de Parcelas', 'vverner-getnet'),
+				'title' => __('Maximum installment quantity', 'vverner-getnet'),
 				'type'  => 'select',
 				'default' => 12,
 				'options' => [1,2,3,4,5,6,7,8,9,10,11,12]
 			],
 			'sandbox' => array(
 				'title'       => __('Sandbox', 'vverner-getnet'),
-				'label'       => __('Marque para utilizar a versão de testes da integração', 'vverner-getnet'),
+				'label'       => __('Check to use the sandbox version of the integration', 'vverner-getnet'),
 				'type'        => 'checkbox',
 				'default'     => 'no',
 				'desc_tip'    => true,
@@ -107,7 +107,7 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 			echo wpautop(trim(sanitize_text_field($this->description)));
 		}
 		if ($this->sandbox){ 
-			echo wpautop(__('Versão de testes, utilize os cartões de créditos disponibilizados <a href="https://developers.getnet.com.br/checkout#section/Cartoes-para-Teste" target="_blank" rel="noopener noreferrer">neste link</a>', 'vverner-getnet'));
+			echo wpautop(__('Sandbox mode. You can use the credit cards provided <a href="https://developers.getnet.com.br/checkout#section/Cartoes-para-Teste" target="_blank" rel="noopener noreferrer">in the documentation</a>', 'vverner-getnet'));
 		}
 
 		wc_get_template(
@@ -174,8 +174,9 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 		$res = $this->api->FetchGetnetData('v1/payments/credit', $data);
 
 		if (isset($res['status_code'])) {
-			error_log('GETNET: não foi possível realizar o pagamento devido a ' . $res['message']);
-			error_log(print_r($res, true));
+			WC_Getnet::Log('GETNET: não foi possível realizar o pagamento devido a' . $res['message']);
+			WC_Getnet::Log(print_r($res, true));
+
 			wc_add_notice(__('GETNET: ', 'vverner-getnet') . $res['message'], 'error' );
 			return $status;
 		}
@@ -183,7 +184,7 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 		if($res['status'] === 'APPROVED') {
 			$order->payment_complete();
 			wc_reduce_stock_levels($order);
-			$order->add_order_note(__('Pagamento recebido', 'vverner-getnet'), false );
+			$order->add_order_note(__('Payment received', 'vverner-getnet'), false );
 			$woocommerce->cart->empty_cart();
 
 			$this->RemoveCardData($token);

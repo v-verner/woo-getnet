@@ -5,7 +5,7 @@ jQuery(function($){
     const $inputs = $('#wc-getnet-cc-form input:not([type="hidden"])');
 
     // LISTENER
-	$form.on( 'checkout_place_order_getnet', processCreditCard );
+	$form.on('checkout_place_order_getnet', processCreditCard );
 
     // MASKS
     $('#getnet_ccNo').mask('0000.0000.0000.0000', {clearIfNotMatch: true});

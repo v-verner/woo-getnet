@@ -2,7 +2,7 @@
 
 class WC_Getnet
 {
-    public static function init()
+    public static function Init()
     {
         if (class_exists('WC_Payment_Gateway')) {
             self::requires();
@@ -22,6 +22,18 @@ class WC_Getnet
             add_action('admin_notices', array(__CLASS__, 'woocommerce_missing_notice'));
         }
     }
+
+    public static function Log(string $message)
+    {
+        if(function_exists('wc_get_logger')) : 
+            $logger  = wc_get_logger();
+            $context = ['source' => 'vverner-getnet'];
+            $logger->error($message, $context);
+        else : 
+            error_log($message);
+        endif;
+    }
+
 
     public static function OnlyDigits(string $str)
 	{
@@ -50,7 +62,7 @@ class WC_Getnet
     public static function plugin_action_links($links)
     {
         $plugin_links   = array();
-        $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=getnet')) . '">'. __('Configurações', 'vverner-getnet') .'</a>';
+        $plugin_links[] = '<a href="' . esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=getnet')) . '">'. __('Settings', 'vverner-getnet') .'</a>';
 
         return array_merge($plugin_links, $links);
     }
