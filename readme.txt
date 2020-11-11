@@ -84,6 +84,14 @@ Por enquanto não, estamos trabalhando nesta funcionalidade
 
 == Changelog ==
 
+= 1.1 - 11/09/2020 =
+
+* O processo de pagamento esta mais robusto e seguro
+* Foram atualizadas chamadas da API
+* Traduções atualizadas. Obrigado para Deise Dilkin que contribuiu com o projeto
+* Testes iniciais para pagamento via boleto! Acreditamos que na próxima atualização essa função estará disponível
+* Testes iniciais para estorno de pagamento pelo painel admin! Acreditamos que na próxima atualização essa função estará disponível
+
 = 1.0.1 - 18/08/2020 =
 
 * Inseridos textos em inglês para futura tradução

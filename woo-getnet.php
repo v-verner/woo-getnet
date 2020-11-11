@@ -4,7 +4,7 @@
  * Description:          Includes Getnet as a payment method in WooCommerce. You will need Getnet API keys for the integration to work. Get them from your manager.
  * Author:               VVerner
  * Author URI:           https://vverner.com
- * Version:              1.0.1
+ * Version:              1.1
  * License:              GPLv3 or later
  * WC requires at least: 3.0
  * WC tested up to:      4.4
@@ -31,10 +31,10 @@
  */
 
 // Plugin constants.
-define( 'WC_GETNET_VERSION', '1.0.1' );
+define( 'WC_GETNET_VERSION', '1.1' );
 define( 'WC_GETNET_PLUGIN_FILE', __FILE__ );
 
 if ( ! class_exists( 'WC_Getnet' ) ) {
 	require_once __DIR__ . '/app/class.WC_Getnet.php';
-	add_action( 'plugins_loaded', ['WC_Getnet', 'Init'] );
+	add_action( 'plugins_loaded', ['WC_Getnet', 'init'] );
 }

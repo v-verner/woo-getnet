@@ -2,8 +2,10 @@
 
 class WC_Getnet
 {
-    public static function Init()
+    public static function init()
     {
+		add_action('init', [__CLASS__, 'load_plugin_textdomain']);
+
         if (class_exists('WC_Payment_Gateway')) {
             self::requires();
 
@@ -14,33 +16,37 @@ class WC_Getnet
 
             if (is_admin()) {
                 add_action('admin_notices', array(__CLASS__, 'ecfb_missing_notice'));
+		        add_action('admin_enqueue_scripts', [__CLASS__, 'admin_scripts']);
             }
-
-		    add_action('admin_enqueue_scripts', [__CLASS__, 'admin_scripts']);
-
+            
         } else {
             add_action('admin_notices', array(__CLASS__, 'woocommerce_missing_notice'));
         }
     }
 
-    public static function Log(string $message)
+    public static function log(string $message)
     {
         if(function_exists('wc_get_logger')) : 
             $logger  = wc_get_logger();
             $context = ['source' => 'vverner-getnet'];
             $logger->error($message, $context);
+            error_log($message);
         else : 
             error_log($message);
         endif;
     }
 
+    public static function load_plugin_textdomain()
+    {
+		load_plugin_textdomain( 'vverner-getnet', false, dirname( plugin_basename( WC_GETNET_PLUGIN_FILE ) ) . '/languages/' );
+	}
 
-    public static function OnlyDigits(string $str)
+    public static function onlyDigits(string $str)
 	{
 		return preg_replace('/\D/', '', $str);
 	}
 
-	public static function FormatNumber($number): string
+	public static function formatNumber($number): string
 	{
 		return number_format($number, 2, ',', '.');
 	}

@@ -5,7 +5,7 @@ jQuery(function($){
     const $inputs = $('#wc-getnet-cc-form input:not([type="hidden"])');
 
     // LISTENER
-	$form.on('checkout_place_order_getnet', processCreditCard );
+	$form.on('checkout_place_order_getnet', processCreditCard);
 
     // MASKS
     $('#getnet_ccNo').mask('0000.0000.0000.0000', {clearIfNotMatch: true});
@@ -22,12 +22,16 @@ jQuery(function($){
             return true;
         }
 
+        const placeOrderText = $form.find('#place_order').text();
+        $form.find('#place_order').attr('disabled', true).text('Validando Cartão...');
+
         if(!validateForm()) {
             alert('Por favor, confira os dados do seu cartão');
             return false;
         }
 
         const exp = $('#getnet_expdate').val().split('/');
+
         const data = {
             action  : 'getnet_processCreditCard',
             card    : $('#getnet_ccNo').val(),
@@ -38,13 +42,17 @@ jQuery(function($){
         }
 
         $.post(getnetParams.url, data, (res) => {
-            const data = JSON.parse(res);
-            if(data.status === 'success') {
-                $form.find('#getnet_ccToken').val(data.message);
+            const result = res.data.message;
+            if(res.success) {
+                $form.find('input[name="getnet_ccToken"]').val(result.token);
+                $form.find('input[name="getnet_ccMonth"]').val(result.expMonth);
+                $form.find('input[name="getnet_ccYear"]').val(result.expYear);
+
                 getnet_submit = true;
                 $form.submit();
             } else {
-                alert(data.message);
+                alert(result.message);
+                $form.find('#place_order').attr('disabled', false).text(placeOrderText);
                 return false;
             }
         })

@@ -1,4 +1,5 @@
 <?php defined( 'ABSPATH' ) || exit;
+
 class WC_Getnet_Gateway extends WC_Payment_Gateway
 {
 	public function __construct()
@@ -7,7 +8,7 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 		$this->has_fields = true;
 		$this->method_title = __('Getnet', 'vverner-getnet');
 		$this->method_description = __('Integrates Getnet payment method into Woocommerce checkout', 'vverner-getnet');
-		$this->supports = ['products'];
+		$this->supports = ['products', 'refunds'];
 
 		$this->init_form_fields();
 		$this->init_settings();
@@ -112,7 +113,7 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 
 		wc_get_template(
 			'form-fields.php', [
-				'installments' => $this->GetInstallments()
+				'installments' => $this->getInstallments()
 			], 'woocommerce/getnet/', WC_Getnet::get_templates_path()
 		);
 	}
@@ -124,6 +125,7 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 		if (!is_cart() && !is_checkout() && !isset($_GET['pay_for_order'])) return;
 
 		$min = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
+		$min = '';
 
 		wp_enqueue_script('gn-main', plugins_url('assets/main'. $min .'.js', __FILE__), ['jquery', 'jquery-mask'], WC_GETNET_VERSION, true);
 		wp_localize_script('gn-main', 'getnetParams', [
@@ -137,66 +139,72 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 		$order = wc_get_order($order_id);
 		if(!isset($_POST['getnet_ccToken']) || empty($_POST['getnet_ccToken'])) return;
 
-		$token = sanitize_text_field($_POST['getnet_ccToken']);
-
-		$status = ['result'   => 'fail','redirect' => ''];
-		$card = $this->GetCardData($token);
-		$installments = (int) sanitize_text_field($_POST['getnet_installments']);
-		$transaction_type = ($installments !== 1) ? 'INSTALL_NO_INTEREST' : 'FULL';
-
-		$data = [
-			'seller_id' => $this->seller_id,
-			'amount' => $order->get_total() * 100,
-			'order' => [
-				'order_id' => (string) $order_id
-			],
-			'customer' => [
-				'customer_id' 		=> (string) $order->get_customer_id(),
-				'first_name'		=> $order->get_billing_first_name(),
-				'last_name'			=> $order->get_billing_last_name(),
-				'billing_address' 	=> (object) []
-			],
-			'device' => (object) [],
-			'shippings' => [
-				[
-					'address' => (object) []
-				]
-			],
-			'credit' => (object) [
-				'delayed' => false,
-				'save_card_data' => false,
-				'transaction_type' => $transaction_type,
-				'number_installments' => $installments,
-				'card' => (object) $card
-			]
+		$sec = [
+			'token' 	=> sanitize_text_field($_POST['getnet_ccToken']),
+			'expMonth' 	=> sanitize_text_field($_POST['getnet_ccMonth']),
+			'expYear'  	=> sanitize_text_field($_POST['getnet_ccYear']),
+			'name'  	=> sanitize_text_field($_POST['getnet_ccName']),
 		];
+		$installments = (int) sanitize_text_field($_POST['getnet_installments']);
+		$paymentId = $this->api->processPayment($order, $installments, $sec);
 
-		$res = $this->api->FetchGetnetData('v1/payments/credit', $data);
-
-		if (isset($res['status_code'])) {
-			WC_Getnet::Log('GETNET: não foi possível realizar o pagamento devido a' . $res['message']);
-			WC_Getnet::Log(print_r($res, true));
-
-			wc_add_notice(__('GETNET: ', 'vverner-getnet') . $res['message'], 'error' );
-			return $status;
-		}
-
-		if($res['status'] === 'APPROVED') {
+		if($paymentId):
 			$order->payment_complete();
 			wc_reduce_stock_levels($order);
 			$order->add_order_note(__('Payment received', 'vverner-getnet'), false );
+			$order->add_order_note(__('Payment ID: ' . $paymentId, 'vverner-getnet'), false );
+			$order->add_meta_data('getnet_data', serialize([
+				'payment' => $paymentId,
+				'date' 	  => date('U')
+			]), true);
 			$woocommerce->cart->empty_cart();
 
-			$this->RemoveCardData($token);
-
-			$status['result'] = 'success';
-			$status['redirect'] =  $this->get_return_url( $order );
-		}
+			$status = [
+				'result'   => 'success',
+				'redirect' => $this->get_return_url( $order )
+			];
+		else: 
+			$status = [
+				'result'   => 'fail',
+				'redirect' => ''
+			];
+		endif;
 
 		return $status;
 	}
+ 
+	public function process_refund($order_id, $amount = NULL, $reason = '')
+	{
+		global $woocommerce;
+		$order = wc_get_order($order_id);
 
-	public function GetInstallments() : array
+		$meta = $order->get_meta('getnet_data');
+		$meta = ($meta) ? unserialize($meta) : null;
+		$refund = false;
+
+		if(!$meta): 
+			$order->add_order_note(__('The payment could not be refunded due to lack of information', 'vverner-getnet'), false );
+		
+		elseif(intval($meta['date']) !== intval(date('U'))):
+			$order->add_order_note(__('The payment could not be refunded because it is out of date for a refund.', 'vverner-getnet'), false );
+		
+		else: 
+			$refund = $this->api->refundPayment($meta['payment']);
+
+		endif;
+
+		if($refund): 
+			$order->add_order_note(__('Payment refunded', 'vverner-getnet'), false );
+
+		else: 
+			$order->add_order_note(__('Payment not refunded', 'vverner-getnet'), false );
+
+		endif;
+
+		return $refund;
+	}
+
+	public function getInstallments() : array
 	{
 		global $woocommerce;
 		$orderAmount = $woocommerce->cart->total;
@@ -214,33 +222,8 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
 		return $res;
 	}
 
-	public function IsSandbox(): bool
+	public function isSandbox(): bool
 	{
 		return $this->sandbox;
 	}
-
-	public function SetCardData($data)
-	{
-		$cacheName = base64_encode($data->number_token);
-		$cache = base64_encode(serialize($data));
-		set_transient($cacheName, $cache, MINUTE_IN_SECONDS *30);
-	}
-
-	private function RemoveCardData($token)
-	{
-		$cacheName = base64_encode($token);
-		delete_transient($cacheName);
-		return true;		
-	}
-
-	private function GetCardData($token)
-	{
-		$cacheName = base64_encode($token);
-		$cache = get_transient($cacheName);
-		if (!$cache) return false;
-		
-		$data = unserialize(base64_decode($cache));
-		return $data;
-	}
-
 }
