@@ -84,6 +84,10 @@ Por enquanto não, estamos trabalhando nesta funcionalidade
 
 == Changelog ==
 
+= 1.1.1 - 06/01/2020 =
+* Em alguns casos os campos de número de cartão e data de validade não tinham formatação.
+* A mensagem de erro ao validar o cartão não era exibida corretamente no checkout.
+
 = 1.1 - 11/09/2020 =
 
 * O processo de pagamento esta mais robusto e seguro

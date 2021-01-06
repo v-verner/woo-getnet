@@ -1,19 +1,19 @@
 jQuery(function($){
-    const $toggleSandbox = $('#woocommerce_getnet_sandbox');
+   const $toggleSandbox = $('#woocommerce_getnet_sandbox');
 
-    if(!$toggleSandbox.length) return;
+   if(!$toggleSandbox.length) return;
 
-    $toggleSandbox.change(updateNeededKeys);
-    updateNeededKeys();
+   $toggleSandbox.change(updateNeededKeys);
+   updateNeededKeys();
 
-    function updateNeededKeys() {
-        const isSandbox = $toggleSandbox.is(':checked');
-        if(isSandbox) {
-            $('.sandbox').parents('tr').show();
-            $('.production').parents('tr').hide();
-        } else {
-            $('.sandbox').parents('tr').hide();
-            $('.production').parents('tr').show();
-        }
-    }
+   function updateNeededKeys() {
+       const isSandbox = $toggleSandbox.is(':checked');
+       if(isSandbox) {
+           $('.sandbox').parents('tr').show();
+           $('.production').parents('tr').hide();
+       } else {
+           $('.sandbox').parents('tr').hide();
+           $('.production').parents('tr').show();
+       }
+   }
 });
