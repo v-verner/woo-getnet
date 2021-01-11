@@ -128,6 +128,7 @@ class WC_Getnet_Gateway extends WC_Payment_Gateway
       if (!is_cart() && !is_checkout() && !isset($_GET['pay_for_order'])) return;
 
       $min = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.prod';
+      $min = ''; // error on prod version
 
       wp_enqueue_script('jquery-mask', plugins_url('assets/jquery.mask.min.js', __FILE__), ['jquery'], WC_GETNET_VERSION, true);
       wp_enqueue_script('gn-main', plugins_url('assets/main' . $min . '.js', __FILE__), ['jquery', 'jquery-mask'], WC_GETNET_VERSION, true);

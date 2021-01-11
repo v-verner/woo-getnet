@@ -84,6 +84,9 @@ Por enquanto não, estamos trabalhando nesta funcionalidade
 
 == Changelog ==
 
+= 1.1.2 - 11/01/2020 =
+* A versão de produção do arquivo .js do carrinho estava com erro, a modificação foi revertida.
+
 = 1.1.1 - 06/01/2020 =
 * Em alguns casos os campos de número de cartão e data de validade não tinham formatação.
 * A mensagem de erro ao validar o cartão não era exibida corretamente no checkout.
