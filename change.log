@@ -1,0 +1,30 @@
+= 1.2 - 14/05/2021 -
+* Assets minificados e operacionais
+* Integração com o modo "anti-fraude" da api
+* Tradução adicionada com sucesso
+* Erros do checkout agora são mais descritivos e exibem o retorno da API
+* Atualizado o nome do arquivo inicial do plugin para ficar igual ao diretório do WordPress
+
+= 1.1.2 - 11/01/2021 =
+* A versão de produção do arquivo .js do carrinho estava com erro, a modificação foi revertida.
+
+= 1.1.1 - 06/01/2020 =
+* Em alguns casos os campos de número de cartão e data de validade não tinham formatação.
+* A mensagem de erro ao validar o cartão não era exibida corretamente no checkout.
+
+= 1.1 - 11/09/2020 =
+
+* O processo de pagamento esta mais robusto e seguro
+* Foram atualizadas chamadas da API
+* Traduções atualizadas. Obrigado para Deise Dilkin que contribuiu com o projeto
+* Testes iniciais para pagamento via boleto! Acreditamos que na próxima atualização essa função estará disponível
+* Testes iniciais para estorno de pagamento pelo painel admin! Acreditamos que na próxima atualização essa função estará disponível
+
+= 1.0.1 - 18/08/2020 =
+
+* Inseridos textos em inglês para futura tradução
+* Ativada integração com log nativo do WooCommerce
+
+= 1.0.0 - 28/08/2020 =
+
+* Lançamento do Plugin

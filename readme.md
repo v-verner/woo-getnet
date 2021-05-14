@@ -84,6 +84,13 @@ Por enquanto não, estamos trabalhando nesta funcionalidade
 
 == Changelog ==
 
+= 1.2 - 14/05/2021 -
+* Assets minificados e operacionais
+* Integração com o modo "anti-fraude" da api
+* Tradução adicionada com sucesso
+* Erros do checkout agora são mais descritivos e exibem o retorno da API
+* Atualizado o nome do arquivo inicial do plugin para ficar igual ao diretório do WordPress
+
 = 1.1.2 - 11/01/2020 =
 * A versão de produção do arquivo .js do carrinho estava com erro, a modificação foi revertida.
 

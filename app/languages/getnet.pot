@@ -1,0 +1,194 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: VVerner - Getnet Gateway\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-05-14 18:08+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.5.2; wp-5.7.2\n"
+"X-Domain: getnet"
+
+#: app/controller/Init.php:63
+msgid "API Docs"
+msgstr ""
+
+#: app/views/public/form-fields.php:21
+msgid "Card number"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:79
+msgid "Check to use the sandbox version of the integration"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:100
+msgid "Client ID"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:105
+msgid "Client Secret"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:61
+msgid "Description"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:47
+msgid "Enable"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:48
+msgid "Enable Getnet's transparent checkout on WooCommerce"
+msgstr ""
+
+#: app/views/private/notice-woocommerce-missing.php:21
+msgid "Enable Plugin"
+msgstr ""
+
+#: app/views/private/notice-ecfb-missing.php:21
+msgid "Enable plugin"
+msgstr ""
+
+#: app/views/public/form-fields.php:27
+msgid "Expiration date"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:63
+msgid "Extra information available during checkout"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:16
+msgid "Getnet"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:56
+msgid "How the payment option will be displayed during checkout"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://vverner.com"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Includes Getnet as a payment method in WooCommerce. You will need Getnet API "
+"keys for the integration to work. Get them from your manager."
+msgstr ""
+
+#: app/views/private/notice-woocommerce-missing.php:33
+msgid "Install Plugin"
+msgstr ""
+
+#: app/views/private/notice-ecfb-missing.php:33
+msgid "Install plugin"
+msgstr ""
+
+#: app/views/public/form-fields.php:39
+msgid "Installment"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:17
+msgid "Integrates Getnet payment method into Woocommerce checkout"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:72
+msgid "Maximum installment quantity"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:67
+msgid "Minimum installment amount"
+msgstr ""
+
+#: app/views/public/form-fields.php:15
+msgid "Name printed on card"
+msgstr ""
+
+#: app/views/private/notice-ecfb-missing.php:15
+msgid "needs the Brazilian Market on WooCommerce plugin to work!"
+msgstr ""
+
+#: app/views/private/notice-woocommerce-missing.php:15
+msgid "needs WooCommerce to work!"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:57
+msgid "Pay via credit card"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:54
+msgid "Payment method name"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:171
+#, php-format
+msgid "Payment received, transaction ID: %s"
+msgstr ""
+
+#: app/controller/Utils.php:20
+#, php-format
+msgid "Private view file not found for %s"
+msgstr ""
+
+#: app/controller/Utils.php:32
+#, php-format
+msgid "Public view file not found for %s"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:78
+msgid "Sandbox"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:124
+#, php-format
+msgid ""
+"Sandbox mode. You can use the credit cards provided <a href=\"%s\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">in the documentation</a>"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:85
+msgid "SANDBOX: Client ID"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:90
+msgid "SANDBOX: Client Secret"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:95
+msgid "SANDBOX: Seller ID"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:64
+msgid "Secure transaction via Getnet"
+msgstr ""
+
+#: app/views/public/form-fields.php:33
+msgid "Security Code (CVC)"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:110
+msgid "Seller ID"
+msgstr ""
+
+#: app/controller/Init.php:62
+msgid "Settings"
+msgstr ""
+
+#. Author of the plugin
+msgid "VVerner"
+msgstr ""
+
+#: app/views/private/notice-ecfb-missing.php:13
+#: app/views/private/notice-woocommerce-missing.php:13
+msgid "VVerner - Getnet for WooCommerce"
+msgstr ""
+
+#. Name of the plugin
+msgid "VVerner - Getnet Gateway"
+msgstr ""
