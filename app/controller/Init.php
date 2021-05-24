@@ -70,12 +70,12 @@ class Init
       require_once WC_GETNET_APP . '/controller/Getnet_Gateway.php';
    }
 
-   private function enqueueEcfbMissingNotice()
+   public function enqueueEcfbMissingNotice()
    {
       Utils::loadPrivateView('notice-ecfb-missing');
    }
 
-   private function enqueueWooCommerceMissingNotice()
+   public function enqueueWooCommerceMissingNotice()
    {
       Utils::loadPrivateView('notice-woocommerce-missing');
    }

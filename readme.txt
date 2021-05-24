@@ -2,7 +2,7 @@
 Contributors: vverner
 Tags: woocommerce, getnet, payment
 Requires at least: 5.4
-Tested up to: 5.4
+Tested up to: 5.7.2
 Requires PHP: 7.1
 Stable tag: trunk
 License: GPLv3 or later
@@ -83,6 +83,10 @@ Não, apenas checkout transparente nesta versão
 Por enquanto não, estamos trabalhando nesta funcionalidade
 
 == Changelog ==
+
+= 1.2.1 - 24/05/2021 =
+* Corrigido algumas notices que estavam carregando no log do WP
+* Atualizada versões mínimas e testadas do WordPress e WooCommerce
 
 = 1.2 - 14/05/2021 -
 * Assets minificados e operacionais

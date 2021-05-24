@@ -1,4 +1,8 @@
-= 1.2 - 14/05/2021 -
+= 1.2.1 - 24/05/2021 =
+* Corrigido algumas notices que estavam carregando no log do WP
+* Atualizada versões mínimas e testadas do WordPress e WooCommerce
+
+= 1.2 - 14/05/2021 =
 * Assets minificados e operacionais
 * Integração com o modo "anti-fraude" da api
 * Tradução adicionada com sucesso
