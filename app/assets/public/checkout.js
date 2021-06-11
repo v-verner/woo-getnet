@@ -26,11 +26,36 @@ jQuery(function ($) {
       return true;
    });
 
+   $form.on("checkout_place_order_getnet_debit", function(){
+      if (!$("#payment_method_getnet_debit").is(":checked")) {
+         return true;
+      }
+
+      const $inputs = $('#wc-getnet-debit-cc-form input:not([type="hidden"])');
+      let isFilled = true;
+
+      $inputs.each(function () {
+         if (!$(this).val()) isFilled = false;
+      });
+
+      if(!isFilled) {
+         alert("Por favor, preencha todos os dados do seu cartão");
+         return false;
+      }
+
+      if(!isValidDate( $('#getnet_debit_expdate').val() )) {
+         alert("Por favor, confirma a data de vencimento do seu cartão");
+         return false;
+      }
+
+      return true;
+   });
+
    $(document).change(function() {
-      $("#getnet_ccNo").mask("0000 0000 0000 0000", {
+      $("#getnet_ccNo, #getnet_debit_ccNo").mask("0000 0000 0000 0000", {
          clearIfNotMatch: true
       });
-      $("#getnet_expdate").mask("00/00", {
+      $("#getnet_expdate, #getnet_debit_expdate").mask("00/00", {
          clearIfNotMatch: true
       });
    })

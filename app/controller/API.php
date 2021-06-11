@@ -32,6 +32,28 @@ class API
       return $this->seller_ID !== '' &&  $this->client_ID !== '' &&  $this->clientSecret !== '';
    }
 
+   public function processDebitPayment(WC_Order $order, array $cc): stdClass
+   {
+      $isPerson   = (int) $order->get_meta('_billing_persontype') === 1;
+      $doc        = $isPerson ? Utils::OnlyDigits($order->get_meta('_billing_cpf')) : Utils::OnlyDigits($order->get_meta('_billing_cnpj'));
+
+      $session_ID = $doc . $order->get_id() . $this->client_ID;
+
+      $data       = [
+         'seller_id' => (string) $this->seller_ID,
+         'amount'    => (int) $order->get_total() * 100,
+         'order'     => $this->getOrderData($order),
+         'customer'  => $this->getCustomerData($order),
+         'device'    => $this->getDeviceData($session_ID),
+         'shippings' => $this->getShippingData($order),
+         'debit'     => $this->getDebitData($order->get_billing_phone(), $cc)
+      ];
+
+      $res = $this->fetchGetnetData('v1/payments/debit', $data);
+
+      return $this->traitPaymentResult( $res );
+   }
+
    public function processPayment(WC_Order $order, int $installments, array $cc): stdClass
    {
       $isPerson   = (int) $order->get_meta('_billing_persontype') === 1;
@@ -40,8 +62,8 @@ class API
       $session_ID = $doc . $order->get_id() . $this->client_ID;
 
       $data       = [
-         'seller_id' => $this->seller_ID,
-         'amount'    => $order->get_total() * 100,
+         'seller_id' => (string) $this->seller_ID,
+         'amount'    => (int) $order->get_total() * 100,
          'order'     => $this->getOrderData($order),
          'customer'  => $this->getCustomerData($order),
          'device'    => $this->getDeviceData($session_ID),
@@ -75,11 +97,11 @@ class API
    public function validateCard($token, $month, $year, $cvv, $name): bool
    {
       $data = (object) [
-         'number_token'      => $token,
-         'expiration_month'  => $month,
-         'expiration_year'   => $year,
-         'security_code'     => $cvv,
-         'cardholder_name'   => $name
+         'number_token'      => (string) $token,
+         'expiration_month'  => (string) $month,
+         'expiration_year'   => (string) $year,
+         'security_code'     => (string) $cvv,
+         'cardholder_name'   => (string) $name
       ];
       $res = $this->fetchGetnetData('v1/cards/verification', $data);
 
@@ -130,22 +152,22 @@ class API
 
       return (object) [
          'customer_id'        => (string) $order->get_customer_id(),
-         'first_name'         => $order->get_billing_first_name(),
-         'last_name'          => $order->get_billing_last_name(),
-         'name'               => $order->get_formatted_billing_full_name(),
-         'email'              => $order->get_billing_email(), 
-         'phone_number'       => Utils::OnlyDigits($order->get_billing_phone()), 
+         'first_name'         => (string) $order->get_billing_first_name(),
+         'last_name'          => (string) $order->get_billing_last_name(),
+         'name'               => (string) $order->get_formatted_billing_full_name(),
+         'email'              => (string) $order->get_billing_email(), 
+         'phone_number'       => (string) Utils::OnlyDigits($order->get_billing_phone()), 
          'document_type'      => $isPerson ? 'CPF' : 'CNPJ',
-         'document_number'    => $doc,
+         'document_number'    => (string) $doc,
          'billing_address'    => (object) [
-            'street'       => $order->get_billing_address_1(),
-            'number'       => $order->get_meta('_billing_number'),
-            'complement'   => $order->get_billing_address_2(),
-            'district'     => $order->get_meta('_billing_neighborhood'),
-            'city'         => $order->get_billing_city(),
-            'state'        => $order->get_billing_state(),
-            'country'      => $order->get_billing_country(),
-            'postal_code'  => Utils::OnlyDigits($order->get_billing_postcode()),
+            'street'       => (string) $order->get_billing_address_1(),
+            'number'       => (string) $order->get_meta('_billing_number'),
+            'complement'   => (string) $order->get_billing_address_2(),
+            'district'     => (string) $order->get_meta('_billing_neighborhood'),
+            'city'         => (string) $order->get_billing_city(),
+            'state'        => (string) $order->get_billing_state(),
+            'country'      => (string) $order->get_billing_country(),
+            'postal_code'  => (string) Utils::OnlyDigits($order->get_billing_postcode()),
          ]
          ];
    }
@@ -155,8 +177,8 @@ class API
       $this->getDeviceFingerPrint( $session_ID );
 
       return (object) [
-         'ip_address'   => $_SERVER['REMOTE_ADDR'] ?? '',
-         'device_id'    => $session_ID,
+         'ip_address'   => (string) $_SERVER['REMOTE_ADDR'] ?? '',
+         'device_id'    => (string) $session_ID,
       ];
    }
 
@@ -164,20 +186,20 @@ class API
    {
       return [
          (object) [
-            'first_name'      => $order->get_shipping_first_name(),
-            'name'            => $order->get_formatted_shipping_full_name(),
-            'email'           => $order->get_billing_email(), 
-            'phone_number'    => Utils::OnlyDigits($order->get_billing_phone()), 
-            'shipping_amount' => $order->get_shipping_total() * 100,
+            'first_name'      => (string) $order->get_shipping_first_name(),
+            'name'            => (string) $order->get_formatted_shipping_full_name(),
+            'email'           => (string) $order->get_billing_email(), 
+            'phone_number'    => (string) Utils::OnlyDigits($order->get_billing_phone()), 
+            'shipping_amount' => (int) $order->get_shipping_total() * 100,
             'address'         => (object) [
-               'street'          => $order->get_shipping_address_1(),
-               'number'          => $order->get_meta('_shipping_number'),
-               'complement'      => $order->get_shipping_address_2(),
-               'district'        => $order->get_meta('_shipping_neighborhood'),
-               'city'            => $order->get_shipping_city(),
-               'state'           => $order->get_shipping_state(),
-               'country'         => $order->get_shipping_country(),
-               'postal_code'     => Utils::OnlyDigits($order->get_shipping_postcode()),
+               'street'          => (string) $order->get_shipping_address_1(),
+               'number'          => (string) $order->get_meta('_shipping_number'),
+               'complement'      => (string) $order->get_shipping_address_2(),
+               'district'        => (string) $order->get_meta('_shipping_neighborhood'),
+               'city'            => (string) $order->get_shipping_city(),
+               'state'           => (string) $order->get_shipping_state(),
+               'country'         => (string) $order->get_shipping_country(),
+               'postal_code'     => (string) Utils::OnlyDigits($order->get_shipping_postcode()),
             ]
          ]
       ];
@@ -189,13 +211,28 @@ class API
          'delayed'               => false,
          'save_card_data'        => false,
          'transaction_type'      => ($installments !== 1) ? 'INSTALL_NO_INTEREST' : 'FULL',
-         'number_installments'   => $installments,
+         'number_installments'   => (int) $installments,
          'card'                  => (object) [
-            'number_token'          => $cc['token'],
-            'cardholder_name'       => $cc['name'],
-            'security_code'         => $cc['cvc'],
-            'expiration_month'      => $cc['expMonth'],
-            'expiration_year'       => $cc['expYear'],
+            'number_token'          => (string) $cc['token'],
+            'cardholder_name'       => (string) $cc['name'],
+            'security_code'         => (string) $cc['cvc'],
+            'expiration_month'      => (string) $cc['expMonth'],
+            'expiration_year'       => (string) $cc['expYear'],
+         ]
+      ];
+   }
+
+   private function getDebitData(string $phone, array $cc): stdClass
+   {
+      return (object) [
+         'cardholder_mobile'     => (string) Utils::OnlyDigits($phone),
+         'authenticated'         => true,
+         'card'                  => (object) [
+            'number_token'          => (string) $cc['token'],
+            'cardholder_name'       => (string) $cc['name'],
+            'security_code'         => (string) $cc['cvc'],
+            'expiration_month'      => (string) $cc['expMonth'],
+            'expiration_year'       => (string) $cc['expYear'],
          ]
       ];
    }

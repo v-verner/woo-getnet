@@ -1,3 +1,7 @@
+= 1.2.2 - 11/06/2021 =
+* Corrigido tipagem dos dados para envio da APIs
+* Inicio do desenvolvimento do método de pagamento via débito, falta trabalhar no recebimento das notificações de pagamento antes de liberar para uso
+
 = 1.2.1 - 24/05/2021 =
 * Corrigido algumas notices que estavam carregando no log do WP
 * Atualizada versões mínimas e testadas do WordPress e WooCommerce

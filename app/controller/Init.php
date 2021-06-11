@@ -38,6 +38,8 @@ class Init
    public static function enqueueGateway($methods)
    {
       $methods[] = 'Getnet_Gateway';
+      //TODO: finish on next update
+      // $methods[] = 'Getnet_Gateway_Debit';
       return $methods;
    }
 
@@ -68,6 +70,7 @@ class Init
    {
       require_once WC_GETNET_APP . '/controller/API.php';
       require_once WC_GETNET_APP . '/controller/Getnet_Gateway.php';
+      require_once WC_GETNET_APP . '/controller/Getnet_Gateway_Debit.php';
    }
 
    public function enqueueEcfbMissingNotice()

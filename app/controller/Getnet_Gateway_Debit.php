@@ -2,9 +2,9 @@
 
 defined('ABSPATH') || exit;
 
-class Getnet_Gateway extends WC_Payment_Gateway
+class Getnet_Gateway_Debit extends WC_Payment_Gateway
 {
-   public const ID = 'getnet';
+   public const ID = 'getnet_debit';
    private const PAYMENT_DATA = '_getnet_transaction_data';
 
    private $_api;
@@ -13,7 +13,7 @@ class Getnet_Gateway extends WC_Payment_Gateway
    {
       $this->id = self::ID;
       $this->has_fields = true;
-      $this->method_title = __('Getnet', 'getnet');
+      $this->method_title = __('Getnet - Debit', 'getnet');
       $this->method_description = __('Integrates Getnet payment method into Woocommerce checkout', 'getnet');
       $this->supports = ['products'];
 
@@ -25,8 +25,6 @@ class Getnet_Gateway extends WC_Payment_Gateway
       $this->description      = $this->get_option('description');
       $this->enabled          = $this->get_option('enabled');
       $this->sandbox          = ('yes' === $this->get_option('sandbox'));
-      $this->installments     = $this->get_option('installments') + 1;
-      $this->min_installment  = $this->get_option('min_installment');
 
       $this->seller_id        = $this->sandbox ? $this->get_option('sandbox_seller_id')       : $this->get_option('seller_id');
       $this->client_id        = $this->sandbox ? $this->get_option('sandbox_client_id')       : $this->get_option('client_id');
@@ -54,7 +52,7 @@ class Getnet_Gateway extends WC_Payment_Gateway
             'title'       => __('Payment method name', 'getnet'),
             'type'        => 'text',
             'description' => __('How the payment option will be displayed during checkout', 'getnet'),
-            'default'     => __('Pay via credit card', 'getnet'),
+            'default'     => __('Pay via debit card', 'getnet'),
             'desc_tip'    => true,
          ],
          'description' => [
@@ -62,17 +60,6 @@ class Getnet_Gateway extends WC_Payment_Gateway
             'type'        => 'textarea',
             'description' => __('Extra information available during checkout', 'getnet'),
             'default'     => __('Secure transaction via Getnet', 'getnet'),
-         ],
-         'min_installment' => [
-            'title'        => __('Minimum installment amount', 'getnet'),
-            'type'         => 'number',
-            'default'      => 10,
-         ],
-         'installments' => [
-            'title'        => __('Maximum installment quantity', 'getnet'),
-            'type'         => 'select',
-            'default'      => 12,
-            'options'      => range(1, 12)
          ],
          'sandbox' => [
             'title'       => __('Sandbox', 'getnet'),
@@ -121,17 +108,12 @@ class Getnet_Gateway extends WC_Payment_Gateway
       endif;
 
       if ($this->isSandbox()):
-         echo sprintf(__( 'Sandbox mode. You can use the credit cards provided <a href="%s" target="_blank" rel="noopener noreferrer">in the documentation</a>', 'getnet'), 'https://developers.getnet.com.br/api#section/Cartoes-para-Teste');
+         echo sprintf(__( 'Sandbox mode. You can use the debit cards provided <a href="%s" target="_blank" rel="noopener noreferrer">in the documentation</a>', 'getnet'), 'https://developers.getnet.com.br/api#section/Cartoes-para-Teste');
       endif;
 
-      global $woocommerce;
-      $orderAmount = (float) $woocommerce->cart->total;
-
       wc_get_template(
-         'public/form-fields.php',
-         [
-            'installments' => VVerner\Getnet\Utils::getInstallments( $orderAmount, (int) $this->min_installment, (int) $this->installments)
-         ],
+         'public/debit-form-fields.php',
+         [],
          'woocommerce/getnet/',
          VVerner\Getnet\Utils::getTemplatesPath()
       );
@@ -146,9 +128,9 @@ class Getnet_Gateway extends WC_Payment_Gateway
    {
       global $woocommerce;
       $order = wc_get_order($order_ID);
-      if(!isset($_REQUEST['getnet'])) return;
+      if(!isset($_REQUEST['getnet_debit'])) return;
 
-      $data    = $_REQUEST['getnet'];
+      $data    = $_REQUEST['getnet_debit'];
       $token   = $this->_api->getCardToken( sanitize_text_field($data['cc']) );
       if(!$token) return;
 
@@ -161,9 +143,7 @@ class Getnet_Gateway extends WC_Payment_Gateway
          'name'      => sanitize_text_field($data['name']),
          'cvc'       => sanitize_text_field($data['cvc'])
       ];
-      $installments = (int) $data['installments'];
-      $payment      = $this->_api->processPayment($order, $installments, $cc);
-
+      $payment      = $this->_api->processDebitPayment($order, $cc);
 
       if ($payment->success) :
          $order->payment_complete();
