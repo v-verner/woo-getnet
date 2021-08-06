@@ -44,7 +44,7 @@ jQuery(function ($) {
       }
 
       if(!isValidDate( $('#getnet_debit_expdate').val() )) {
-         alert("Por favor, confirma a data de vencimento do seu cartão");
+         alert("Por favor, confirme a data de vencimento do seu cartão");
          return false;
       }
 

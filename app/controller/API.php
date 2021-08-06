@@ -63,7 +63,7 @@ class API
 
       $data       = [
          'seller_id' => (string) $this->seller_ID,
-         'amount'    => (int) $order->get_total() * 100,
+         'amount'    => (int) ($order->get_total() * 100),
          'order'     => $this->getOrderData($order),
          'customer'  => $this->getCustomerData($order),
          'device'    => $this->getDeviceData($session_ID),
