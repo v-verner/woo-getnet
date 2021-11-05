@@ -1,3 +1,10 @@
+= 1.3 - 01/11/2021 =
+* Correção que no caso de o produto ser "virtual" o endereço usado no anti-fraude não estava funcionando
+* Testes com as versões mais recentes do WooCommerce e WordPress
+* Teste de compatibilidade com PHP 8
+* Método de pagamento por boleto bancário!
+* IMPORTANTE: Por enquanto, pagamento via boleto não confirmam o pagamento do pedido no WooCommerce. Você deve aprovar os pagamentos manualmente
+
 = 1.2.3 - 06/08/2021 =
 * Correção dos preços dos pedidos que estavam indo sem centavos. Obrigado a @cleberasl1234 que identificou o problema
 

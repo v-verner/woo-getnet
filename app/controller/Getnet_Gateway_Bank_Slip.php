@@ -2,10 +2,11 @@
 
 defined('ABSPATH') || exit;
 
-class Getnet_Gateway_Debit extends WC_Payment_Gateway
+class Getnet_Gateway_Bank_Slip extends WC_Payment_Gateway
 {
-   public const ID = 'getnet_debit';
+   public const ID = 'getnet_bank_slip';
    private const PAYMENT_DATA = '_getnet_transaction_data';
+   private const PAYMENT_ID = '_getnet_transaction_id';
 
    private $_api;
 
@@ -13,7 +14,7 @@ class Getnet_Gateway_Debit extends WC_Payment_Gateway
    {
       $this->id = self::ID;
       $this->has_fields = true;
-      $this->method_title = __('Getnet - Debit', 'getnet');
+      $this->method_title = __('Getnet - Bank Slip', 'getnet');
       $this->method_description = __('Integrates Getnet payment method into Woocommerce checkout', 'getnet');
       $this->supports = ['products'];
 
@@ -30,7 +31,10 @@ class Getnet_Gateway_Debit extends WC_Payment_Gateway
       $this->client_id        = $this->sandbox ? $this->get_option('sandbox_client_id')       : $this->get_option('client_id');
       $this->client_secret    = $this->sandbox ? $this->get_option('sandbox_client_secret')   : $this->get_option('client_secret');
 
-      $this->_api             = new VVerner\Getnet\API( $this->seller_id, $this->client_id, $this->client_secret, $this->isSandbox());
+      $this->_api             = new VVerner\Getnet\BankSlip( $this->seller_id, $this->client_id, $this->client_secret, $this->isSandbox());
+
+      $this->_api->setInstructions( $this->get_option('instructions') );
+      $this->_api->setExpireGap( (int) $this->get_option('expire_gap') );
    }
 
    public function using_supported_currency()
@@ -52,7 +56,7 @@ class Getnet_Gateway_Debit extends WC_Payment_Gateway
             'title'       => __('Payment method name', 'getnet'),
             'type'        => 'text',
             'description' => __('How the payment option will be displayed during checkout', 'getnet'),
-            'default'     => __('Pay via debit card', 'getnet'),
+            'default'     => __('Pay via bank slip', 'getnet'),
             'desc_tip'    => true,
          ],
          'description' => [
@@ -60,6 +64,22 @@ class Getnet_Gateway_Debit extends WC_Payment_Gateway
             'type'        => 'textarea',
             'description' => __('Extra information available during checkout', 'getnet'),
             'default'     => __('Secure transaction via Getnet', 'getnet'),
+         ],
+         'instructions' => [
+            'title'       => __('Customer Instructions', 'getnet'),
+            'type'        => 'textarea',
+            'description' => __('Extra information printed on the bank slip', 'getnet'),
+            'default'     => '',
+         ],
+         'expire_gap' => [
+            'title'       => __('Bank Slip expire time', 'getnet'),
+            'type'        => 'number',
+            'description' => __('In how many days the bank slip will be expired', 'getnet'),
+            'default'     => '',
+            'custom_attributes'  => [
+               'min'    => 1,
+               'step'   => 1
+            ]
          ],
          'sandbox' => [
             'title'       => __('Sandbox', 'getnet'),
@@ -101,6 +121,15 @@ class Getnet_Gateway_Debit extends WC_Payment_Gateway
       ];
    }
 
+   public function process_admin_options()
+   {
+      parent::process_admin_options();
+      $settings = new WC_Admin_Settings();
+      $settings->add_message(
+         __('For now, bank slip payments do not receive confirmation of payment by the customer. You must manually approve payments', 'getnet'),
+      );
+   }
+
    public function payment_fields()
    {
       if (!empty($this->description)):
@@ -110,13 +139,6 @@ class Getnet_Gateway_Debit extends WC_Payment_Gateway
       if ($this->isSandbox()):
          echo sprintf(__( 'Sandbox mode. You can use the debit cards provided <a href="%s" target="_blank" rel="noopener noreferrer">in the documentation</a>', 'getnet'), 'https://developers.getnet.com.br/api#section/Cartoes-para-Teste');
       endif;
-
-      wc_get_template(
-         'public/debit-form-fields.php',
-         [],
-         'woocommerce/getnet/',
-         VVerner\Getnet\Utils::getTemplatesPath()
-      );
    }
 
    public function is_available()
@@ -128,28 +150,15 @@ class Getnet_Gateway_Debit extends WC_Payment_Gateway
    {
       global $woocommerce;
       $order = wc_get_order($order_ID);
-      if(!isset($_REQUEST['getnet_debit'])) return;
+      if(!isset($_REQUEST['payment_method']) || $_REQUEST['payment_method'] !== 'getnet_bank_slip') return;
 
-      $data    = $_REQUEST['getnet_debit'];
-      $token   = $this->_api->getCardToken( sanitize_text_field($data['cc']) );
-      if(!$token) return;
-
-      $date    = explode('/', sanitize_text_field($data['date']));
-
-      $cc = [
-         'token'     => $token,
-         'expMonth'  => $date[0],
-         'expYear'   => $date[1],
-         'name'      => sanitize_text_field($data['name']),
-         'cvc'       => sanitize_text_field($data['cvc'])
-      ];
-      $payment      = $this->_api->processDebitPayment($order, $cc);
-
+      $payment = $this->_api->processPayment($order);
       if ($payment->success) :
          $order->payment_complete();
 
          $order->add_order_note(sprintf(__( 'Payment received, transaction ID: %s', 'getnet'), $payment->ID ), false);
          $order->add_meta_data(self::PAYMENT_DATA,  $payment, true);
+         $order->add_meta_data(self::PAYMENT_ID,  $payment->ID, true);
          $order->save();
 
          $woocommerce->cart->empty_cart();
@@ -221,6 +230,22 @@ class Getnet_Gateway_Debit extends WC_Payment_Gateway
       return $this->sandbox;
    }
 
+   public function showPaymentInstructions(int $order_ID): void
+   {
+      $order    = wc_get_order($order_ID);
+      $bankSlip = $order->get_meta(self::PAYMENT_DATA, true);
+
+      wc_get_template(
+         'public/bank_slip-payment_instructions.php',
+         [
+            'order' => $order,
+            'bankSlip' => $bankSlip,
+         ],
+         'woocommerce/getnet/',
+         VVerner\Getnet\Utils::getTemplatesPath()
+      );
+   }
+
    private function enqueueHooks(): void
    {
       add_filter('woocommerce_available_payment_gateways', [$this, 'hideWhenIsOutsideBrazil']);
@@ -228,5 +253,7 @@ class Getnet_Gateway_Debit extends WC_Payment_Gateway
 
       add_action('woocommerce_update_options_payment_gateways_' . self::ID, [$this, 'process_admin_options']);
       add_action('wp_enqueue_scripts', [$this, 'enqueueCheckoutAssets']);
+
+      add_action('woocommerce_thankyou_' . self::ID, [$this, 'showPaymentInstructions']);
    }
 }

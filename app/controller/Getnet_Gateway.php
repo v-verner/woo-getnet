@@ -6,6 +6,7 @@ class Getnet_Gateway extends WC_Payment_Gateway
 {
    public const ID = 'getnet';
    private const PAYMENT_DATA = '_getnet_transaction_data';
+   private const PAYMENT_ID = '_getnet_transaction_id';
 
    private $_api;
 
@@ -32,7 +33,7 @@ class Getnet_Gateway extends WC_Payment_Gateway
       $this->client_id        = $this->sandbox ? $this->get_option('sandbox_client_id')       : $this->get_option('client_id');
       $this->client_secret    = $this->sandbox ? $this->get_option('sandbox_client_secret')   : $this->get_option('client_secret');
 
-      $this->_api             = new VVerner\Getnet\API( $this->seller_id, $this->client_id, $this->client_secret, $this->isSandbox());
+      $this->_api             = new VVerner\Getnet\CreditCard( $this->seller_id, $this->client_id, $this->client_secret, $this->isSandbox());
    }
 
    public function using_supported_currency()
@@ -170,6 +171,7 @@ class Getnet_Gateway extends WC_Payment_Gateway
 
          $order->add_order_note(sprintf(__( 'Payment received, transaction ID: %s', 'getnet'), $payment->ID ), false);
          $order->add_meta_data(self::PAYMENT_DATA,  $payment, true);
+         $order->add_meta_data(self::PAYMENT_ID,  $payment->ID, true);
          $order->save();
 
          $woocommerce->cart->empty_cart();

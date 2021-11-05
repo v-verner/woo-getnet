@@ -38,8 +38,7 @@ class Init
    public static function enqueueGateway($methods)
    {
       $methods[] = 'Getnet_Gateway';
-      //TODO: finish on next update
-      // $methods[] = 'Getnet_Gateway_Debit';
+      $methods[] = 'Getnet_Gateway_Bank_Slip';
       return $methods;
    }
 
@@ -68,9 +67,12 @@ class Init
 
    private function requires()
    {
-      require_once WC_GETNET_APP . '/controller/API.php';
+      require_once WC_GETNET_APP . '/controller/API/Getnet.php';
+      require_once WC_GETNET_APP . '/controller/API/CreditCard.php';
+      require_once WC_GETNET_APP . '/controller/API/BankSlip.php';
+
       require_once WC_GETNET_APP . '/controller/Getnet_Gateway.php';
-      require_once WC_GETNET_APP . '/controller/Getnet_Gateway_Debit.php';
+      require_once WC_GETNET_APP . '/controller/Getnet_Gateway_Bank_Slip.php';
    }
 
    public function enqueueEcfbMissingNotice()

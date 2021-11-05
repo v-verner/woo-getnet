@@ -1,5 +1,5 @@
 jQuery(function($){
-   const $toggleSandbox = $('#woocommerce_getnet_sandbox, #woocommerce_getnet_debit_sandbox');
+   const $toggleSandbox = $('#woocommerce_getnet_sandbox, #woocommerce_getnet_debit_sandbox,  #woocommerce_getnet_bank_slip_sandbox');
 
    if(!$toggleSandbox.length) return;
 

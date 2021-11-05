@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VVerner - Getnet Gateway\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-14 18:08+0000\n"
+"POT-Creation-Date: 2021-11-05 21:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -13,46 +13,57 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.5.2; wp-5.7.2\n"
+"X-Loco-Version: 2.5.5; wp-5.8.1\n"
 "X-Domain: getnet"
 
-#: app/controller/Init.php:63
+#: app/controller/Init.php:64
 msgid "API Docs"
+msgstr ""
+
+#: app/controller/Getnet_Gateway_Bank_Slip.php:75
+msgid "Bank Slip expire time"
 msgstr ""
 
 #: app/views/public/form-fields.php:21
 msgid "Card number"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:79
+#: app/controller/Getnet_Gateway.php:80
+#: app/controller/Getnet_Gateway_Bank_Slip.php:86
 msgid "Check to use the sandbox version of the integration"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:100
+#: app/controller/Getnet_Gateway.php:101
+#: app/controller/Getnet_Gateway_Bank_Slip.php:107
 msgid "Client ID"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:105
+#: app/controller/Getnet_Gateway.php:106
+#: app/controller/Getnet_Gateway_Bank_Slip.php:112
 msgid "Client Secret"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:61
+#: app/controller/Getnet_Gateway_Bank_Slip.php:69
+msgid "Customer Instructions"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:62
+#: app/controller/Getnet_Gateway_Bank_Slip.php:63
 msgid "Description"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:47
+#: app/controller/Getnet_Gateway.php:48
+#: app/controller/Getnet_Gateway_Bank_Slip.php:49
 msgid "Enable"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:48
+#: app/controller/Getnet_Gateway.php:49
+#: app/controller/Getnet_Gateway_Bank_Slip.php:50
 msgid "Enable Getnet's transparent checkout on WooCommerce"
 msgstr ""
 
-#: app/views/private/notice-woocommerce-missing.php:21
-msgid "Enable Plugin"
-msgstr ""
-
 #: app/views/private/notice-ecfb-missing.php:21
+#: app/views/private/notice-woocommerce-missing.php:21
 msgid "Enable plugin"
 msgstr ""
 
@@ -60,20 +71,40 @@ msgstr ""
 msgid "Expiration date"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:63
+#: app/controller/Getnet_Gateway.php:64
+#: app/controller/Getnet_Gateway_Bank_Slip.php:65
 msgid "Extra information available during checkout"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:16
+#: app/controller/Getnet_Gateway_Bank_Slip.php:71
+msgid "Extra information printed on the bank slip"
+msgstr ""
+
+#: app/controller/Getnet_Gateway_Bank_Slip.php:129
+msgid ""
+"For now, bank slip payments do not receive confirmation of payment by the "
+"customer. You must manually approve payments"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:17
 msgid "Getnet"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:56
+#: app/controller/Getnet_Gateway_Bank_Slip.php:17
+msgid "Getnet - Bank Slip"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:57
+#: app/controller/Getnet_Gateway_Bank_Slip.php:58
 msgid "How the payment option will be displayed during checkout"
 msgstr ""
 
 #. Author URI of the plugin
 msgid "https://vverner.com"
+msgstr ""
+
+#: app/controller/Getnet_Gateway_Bank_Slip.php:77
+msgid "In how many days the bank slip will be expired"
 msgstr ""
 
 #. Description of the plugin
@@ -82,11 +113,8 @@ msgid ""
 "keys for the integration to work. Get them from your manager."
 msgstr ""
 
-#: app/views/private/notice-woocommerce-missing.php:33
-msgid "Install Plugin"
-msgstr ""
-
 #: app/views/private/notice-ecfb-missing.php:33
+#: app/views/private/notice-woocommerce-missing.php:33
 msgid "Install plugin"
 msgstr ""
 
@@ -94,15 +122,16 @@ msgstr ""
 msgid "Installment"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:17
+#: app/controller/Getnet_Gateway.php:18
+#: app/controller/Getnet_Gateway_Bank_Slip.php:18
 msgid "Integrates Getnet payment method into Woocommerce checkout"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:72
+#: app/controller/Getnet_Gateway.php:73
 msgid "Maximum installment quantity"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:67
+#: app/controller/Getnet_Gateway.php:68
 msgid "Minimum installment amount"
 msgstr ""
 
@@ -118,15 +147,21 @@ msgstr ""
 msgid "needs WooCommerce to work!"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:57
+#: app/controller/Getnet_Gateway_Bank_Slip.php:59
+msgid "Pay via bank slip"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:58
 msgid "Pay via credit card"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:54
+#: app/controller/Getnet_Gateway.php:55
+#: app/controller/Getnet_Gateway_Bank_Slip.php:56
 msgid "Payment method name"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:171
+#: app/controller/Getnet_Gateway.php:172
+#: app/controller/Getnet_Gateway_Bank_Slip.php:159
 #, php-format
 msgid "Payment received, transaction ID: %s"
 msgstr ""
@@ -141,30 +176,42 @@ msgstr ""
 msgid "Public view file not found for %s"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:78
+#: app/controller/Getnet_Gateway.php:79
+#: app/controller/Getnet_Gateway_Bank_Slip.php:85
 msgid "Sandbox"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:124
+#: app/controller/Getnet_Gateway.php:125
 #, php-format
 msgid ""
 "Sandbox mode. You can use the credit cards provided <a href=\"%s\" "
 "target=\"_blank\" rel=\"noopener noreferrer\">in the documentation</a>"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:85
+#: app/controller/Getnet_Gateway_Bank_Slip.php:140
+#, php-format
+msgid ""
+"Sandbox mode. You can use the debit cards provided <a href=\"%s\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">in the documentation</a>"
+msgstr ""
+
+#: app/controller/Getnet_Gateway.php:86
+#: app/controller/Getnet_Gateway_Bank_Slip.php:92
 msgid "SANDBOX: Client ID"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:90
+#: app/controller/Getnet_Gateway.php:91
+#: app/controller/Getnet_Gateway_Bank_Slip.php:97
 msgid "SANDBOX: Client Secret"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:95
+#: app/controller/Getnet_Gateway.php:96
+#: app/controller/Getnet_Gateway_Bank_Slip.php:102
 msgid "SANDBOX: Seller ID"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:64
+#: app/controller/Getnet_Gateway.php:65
+#: app/controller/Getnet_Gateway_Bank_Slip.php:66
 msgid "Secure transaction via Getnet"
 msgstr ""
 
@@ -172,12 +219,29 @@ msgstr ""
 msgid "Security Code (CVC)"
 msgstr ""
 
-#: app/controller/Getnet_Gateway.php:110
+#: app/controller/Getnet_Gateway.php:111
+#: app/controller/Getnet_Gateway_Bank_Slip.php:117
 msgid "Seller ID"
 msgstr ""
 
-#: app/controller/Init.php:62
+#: app/controller/Init.php:63
 msgid "Settings"
+msgstr ""
+
+#: app/views/public/bank_slip-payment_instructions.php:7
+msgid "The bank slip expiration date is: "
+msgstr ""
+
+#: app/views/public/bank_slip-payment_instructions.php:27
+msgid "Typeful_line copied!"
+msgstr ""
+
+#: app/views/public/bank_slip-payment_instructions.php:4
+msgid "Use the information below to pay your bank slip."
+msgstr ""
+
+#: app/views/public/bank_slip-payment_instructions.php:16
+msgid "View Bank Slip"
 msgstr ""
 
 #. Author of the plugin
