@@ -2,7 +2,7 @@
 Contributors: vverner
 Tags: woocommerce, getnet, payment
 Requires at least: 5.4
-Tested up to: 5.7.2
+Tested up to: 5.8.1
 Requires PHP: 7.1
 Stable tag: trunk
 License: GPLv3 or later
@@ -84,28 +84,46 @@ Por enquanto não, estamos trabalhando nesta funcionalidade
 
 == Changelog ==
 
+= 1.3.1 - 11/11/2021 =
+
+* Correção do método "get_shipping_email" que estava sendo usado incorretamente na criação do pedido
+
+= 1.3 - 01/11/2021 =
+
+* Correção que no caso de o produto ser "virtual" o endereço usado no anti-fraude não estava funcionando
+* Testes com as versões mais recentes do WooCommerce e WordPress
+* Teste de compatibilidade com PHP 8
+* Método de pagamento por boleto bancário!
+* IMPORTANTE: Por enquanto, pagamento via boleto não confirmam o pagamento do pedido no WooCommerce. Você deve aprovar os pagamentos manualmente
+
 = 1.2.3 - 06/08/2021 =
+
 * Correção dos preços dos pedidos que estavam indo sem centavos. Obrigado a @cleberasl1234 que identificou o problema
 
 = 1.2.2 - 11/06/2021 =
+
 * Corrigido tipagem dos dados para envio da APIs
 * Inicio do desenvolvimento do método de pagamento via débito, falta trabalhar no recebimento das notificações de pagamento antes de liberar para uso
 
 = 1.2.1 - 24/05/2021 =
+
 * Corrigido algumas notices que estavam carregando no log do WP
 * Atualizada versões mínimas e testadas do WordPress e WooCommerce
 
-= 1.2 - 14/05/2021 -
+= 1.2 - 14/05/2021 =
+
 * Assets minificados e operacionais
 * Integração com o modo "anti-fraude" da api
 * Tradução adicionada com sucesso
 * Erros do checkout agora são mais descritivos e exibem o retorno da API
 * Atualizado o nome do arquivo inicial do plugin para ficar igual ao diretório do WordPress
 
-= 1.1.2 - 11/01/2020 =
+= 1.1.2 - 11/01/2021 =
+
 * A versão de produção do arquivo .js do carrinho estava com erro, a modificação foi revertida.
 
 = 1.1.1 - 06/01/2020 =
+
 * Em alguns casos os campos de número de cartão e data de validade não tinham formatação.
 * A mensagem de erro ao validar o cartão não era exibida corretamente no checkout.
 

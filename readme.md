@@ -8,6 +8,7 @@ Stable tag: trunk
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
+
 Inclui a Getnet como método de pagamento no WooCommerce. Você precisará das chaves de API da Getnet para que a integração funcione. Consiga-as com seu gerente.
 
 == Description ==
@@ -64,11 +65,7 @@ Este plugin esta licenciado como GPL.
 
 = Quais são os meios de pagamento que o plugin aceita? =
 
-Cartão de Crédito e Boleto Bancário
-
-= O cliente pagou o boleto mas o pedido não mudou o status =
-
-Sim, na versão atual do plugin não foi implementada o retorno automático dos pedidos pagos via boleto bancário.
+Cartão de Crédito
 
 = O pedido foi pago e ficou com o status de "processando" e não como "concluído", isto esta certo? =
 
@@ -87,6 +84,10 @@ Não, apenas checkout transparente nesta versão
 Por enquanto não, estamos trabalhando nesta funcionalidade
 
 == Changelog ==
+
+= 1.3.1 - 11/11/2021 =
+
+* Correção do método "get_shipping_email" que estava sendo usado incorretamente na criação do pedido
 
 = 1.3 - 01/11/2021 =
 
@@ -118,7 +119,7 @@ Por enquanto não, estamos trabalhando nesta funcionalidade
 * Erros do checkout agora são mais descritivos e exibem o retorno da API
 * Atualizado o nome do arquivo inicial do plugin para ficar igual ao diretório do WordPress
 
-= 1.1.2 - 11/01/2020 =
+= 1.1.2 - 11/01/2021 =
 
 * A versão de produção do arquivo .js do carrinho estava com erro, a modificação foi revertida.
 

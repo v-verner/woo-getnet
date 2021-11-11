@@ -134,8 +134,8 @@ abstract class API
          (object) [
             'first_name'      => $hasShippingAddress ? $order->get_shipping_first_name() : $order->get_billing_first_name(),
             'name'            => $hasShippingAddress ? $order->get_formatted_shipping_full_name() : $order->get_formatted_billing_full_name(),
-            'email'           => $hasShippingAddress ? $order->get_shipping_email() : $order->get_billing_email(), 
-            'phone_number'    => $hasShippingAddress ? (string) Utils::OnlyDigits($order->get_shipping_phone()) : (string) Utils::OnlyDigits($order->get_shipping_phone()), 
+            'email'           => $order->get_billing_email(), 
+            'phone_number'    => $hasShippingAddress ? (string) Utils::OnlyDigits($order->get_shipping_phone()) : (string) Utils::OnlyDigits($order->get_billing_phone()), 
             'shipping_amount' => (int) $order->get_shipping_total() * 100,
             'address'         => (object) [
                'street'          => $hasShippingAddress ? (string) $order->get_shipping_address_1() : (string) $order->get_billing_address_1(),
