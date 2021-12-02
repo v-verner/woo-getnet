@@ -62,7 +62,7 @@ jQuery(function ($) {
 
    function isValidDate(check) {
       const day = check.split("/");
-      const date = new Date(day[0] + "-01-20" + day[1]);
+      const date = new Date(20${day[1]}, day[0], 1);
 
       if (date == "Invalid Date") return false;
       const today = new Date();
